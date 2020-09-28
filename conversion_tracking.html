@@ -1,0 +1,158 @@
+<script language="javascript">
+
+    //Set the number of days before your cookie should expire
+    var ExpireDays = 90;
+    //Do not change anything below this line
+    var path = window.location.pathname;
+
+    qstr = document.location.search;
+    qstr = qstr.substring(1, qstr.length);
+
+    function SetCookie(cookieName, cookieValue, nDays) {
+        var today = new Date();
+        var expire = new Date();
+        if (nDays == null || nDays == 0) nDays = 1;
+        expire.setTime(today.getTime() + 3600000 * 24 * nDays);
+        document.cookie = cookieName + "=" + escape(cookieValue) + "; expires=" + expire.toGMTString() + "; path=/";
+    }
+
+    thevars = qstr.split("&");
+
+    for (i = 0; i < thevars.length; i++) {
+        cookiecase = thevars[i].split("=");
+        switch (cookiecase[0]) {
+            case "sfmc_sub":
+                sfmc_sub = cookiecase[1];
+                console.log('@@sfmc_sub : ' + sfmc_sub);
+                SetCookie("SubscriberID", sfmc_sub, ExpireDays);
+                break;
+            case "e":
+                e = cookiecase[1];
+                console.log('@@e : ' + e);
+                SetCookie("EmailAddr_", e, ExpireDays);
+                break;
+            case "j":
+                
+                j = cookiecase[1];
+                console.log('@@j : ' + j);
+                SetCookie("JobID", j, ExpireDays);
+                break;
+            case "l":
+                
+                l = cookiecase[1];
+                console.log('@@l : ' + l);
+                SetCookie("ListID", l, ExpireDays);
+                break
+            case "jb":
+                
+                jb = cookiecase[1];
+                console.log('@@jb : ' + jb);
+                SetCookie("BatchID", jb, ExpireDays);
+                break;
+            case "u":
+                
+                u = cookiecase[1];
+                console.log('@@u : ' + u);
+                SetCookie("UrlID", u, ExpireDays);
+                break;
+            case "mid":
+                
+                mid = cookiecase[1];
+                console.log('@@mid : ' + mid);
+                SetCookie("MemberID", mid, ExpireDays);
+                break;
+            default:
+                console.log('##default');
+                break;
+        }
+
+    }
+
+    if (path.includes('xxxxxxxxxxxxxxxx')){
+        var total_price = document.querySelector('.order-totals-table .order-total .order-value').textContent.replace(/[^0-9]/g,'');
+        var mid = getCookie("MemberID");
+        console.log('mid_landing : ' + mid);
+        console.log('total_price : ' + total_price);
+        SetCookie("total_price", total_price, ExpireDays);
+    }
+
+
+    if (path.includes('xxxxxxxxxxxxxxxx' ) || path.includes('xxxxxxxxxxxxxxxx')) {
+        var convid = "1";
+        var displayorder = "1";
+        var linkalias = "Thanks";
+        var dataAmt = getCookie("total_price");
+        console.log('dataAmt : ' + dataAmt);
+        var dataset = "<data amt=\"" + dataAmt + "\" unit=\"Yen\" accumulate=\"true\" />";
+
+
+        var jobid = getCookie("JobID");
+        var emailaddr = getCookie("EmailAddr_");
+        var subid = getCookie("SubscriberID");
+        var listid = getCookie("ListID");
+        var batchid = getCookie("BatchID");
+        var urlid = getCookie("UrlID");
+        var memberid = getCookie("MemberID");
+
+
+        var txt = '';
+        txt += "xxxxxxxxxxxxxxxx"
+	     txt += "<system><system_name>tracking</system_name><action>conversion</action>";
+        txt += "<member_id>" + memberid + "</member_id>";
+        txt += "<job_id>" + jobid + "</job_id>";
+        
+
+        if (subid == undefined) {
+            txt += "<sub_id></sub_id>";
+        } else {
+            txt += "<sub_id>" + subid + "</sub_id>";
+            emailaddr = undefined;
+        }
+
+        if (emailaddr == undefined) {
+            txt += "<email></email>";
+        } else {
+            txt += "<email>" + emailaddr + "</email>";
+        }
+        
+        txt += "<list>" + listid + "</list>";
+        txt += "<BatchID>" + batchid + "</BatchID>";
+        txt += "<original_link_id>" + urlid + "</original_link_id>";
+        txt += "<conversion_link_id>" + convid + "</conversion_link_id>";
+        txt += "<link_alias>" + linkalias + "</link_alias>";
+        txt += "<display_order>" + displayorder + "</display_order>";
+        txt += "<data_set>" + dataset + "</data_set>";
+        txt += "</system>'";
+
+        console.log('##txt : ' + txt);
+        document.write("<img src='" + encodeURI(txt) +  " width='1'height=‘1’>");
+    }
+
+
+    function SetCookie1(cookieName, cookieValue, nDays) {
+        var today = new Date();
+        var expire = new Date();
+        
+        if (nDays == null || nDays == 0) nDays = 1;
+        
+        expire.setTime(today.getTime() + 3600000 * 24 * nDays);
+        document.cookie = cookieName + "=" + escape(cookieValue) + "; expires=" +
+        expire.toGMTString() + "; path=/";
+    }
+
+    function getCookie(cookiename) {
+        if (document.cookie.length > 0) {
+            startC = document.cookie.indexOf(cookiename + "=");
+            
+            if (startC != -1) {
+                startC += cookiename.length + 1;
+                endC = document.cookie.indexOf(";", startC);
+                
+                if (endC == -1) endC = document.cookie.length;
+                
+                return unescape(document.cookie.substring(startC, endC));
+            }
+        }
+        return null;
+    }
+</script>
